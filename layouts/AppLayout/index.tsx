@@ -10,38 +10,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {Dashboard} from '@mui/icons-material';
-import {styled} from '@mui/system';
 
 const drawerWidth = 240;
-
-const StyledAppBar = styled(AppBar)`
-  background-color: #20212d;
-  color: #fff;
-  font-size: 1.6rem;
-  .title {
-    font-weight: 800;
-    .primary-color {
-      color: #00ff7f;
-    }
-  }
-`;
-
-const StyledDrawer = styled(Drawer)`
-  .MuiPaper-root {
-    background-color: #20212d;
-    color: #fff;
-  }
-  .MuiTypography-root {
-    font-size: 1.6rem;
-  }
-`;
-
-const StyledContent = styled(Box)`
-  min-height: 100vh;
-  background: #0e1115;
-  color: #fff;
-  font-size: 1.6rem;
-`;
 
 interface Props {
   useSideBar?: boolean;
@@ -52,18 +22,29 @@ export const AppLayout = ({useSideBar = true, children}: Props) => {
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline />
-      <StyledAppBar
+      <AppBar
         position="fixed"
-        sx={{zIndex: (theme: any) => theme.zIndex.drawer + 1}}
+        sx={{
+          zIndex: theme => theme.zIndex.drawer + 1,
+          backgroundColor: theme => theme.palette.secondary.main,
+          color: '#fff',
+          fontSize: '1.6rem',
+          '.title': {
+            fontWeight: 800,
+            span: {
+              color: theme => theme.palette.primary.main,
+            },
+          },
+        }}
       >
         <Toolbar>
           <div className="title">
-            ILL<span className="primary-color">H</span>AB
+            ILL<span>H</span>AB
           </div>
         </Toolbar>
-      </StyledAppBar>
+      </AppBar>
       {useSideBar && (
-        <StyledDrawer
+        <Drawer
           variant="permanent"
           sx={{
             width: drawerWidth,
@@ -71,6 +52,11 @@ export const AppLayout = ({useSideBar = true, children}: Props) => {
             [`& .MuiDrawer-paper`]: {
               width: drawerWidth,
               boxSizing: 'border-box',
+              color: '#fff',
+              backgroundColor: theme => theme.palette.secondary.main,
+            },
+            ['& .MuiTypography-root']: {
+              fontSize: '1.6rem',
             },
           }}
         >
@@ -89,12 +75,22 @@ export const AppLayout = ({useSideBar = true, children}: Props) => {
               ))}
             </List>
           </Box>
-        </StyledDrawer>
+        </Drawer>
       )}
-      <StyledContent component="main" sx={{flexGrow: 1, p: 3}}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          minHeight: '100vh',
+          backgroundColor: '#0e1115',
+          color: '#fff',
+          fontSize: '1.6rem',
+        }}
+      >
         <Toolbar />
         {children}
-      </StyledContent>
+      </Box>
     </Box>
   );
 };

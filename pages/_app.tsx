@@ -4,9 +4,11 @@ import Head from 'next/head';
 import {globalStyles} from '@/styles/globalStyle';
 import {Global} from '@emotion/react';
 import {ThemeProvider} from '@mui/material';
-import {theme} from './theme';
+import {createTheme} from '@/theme';
 
 export default function App({Component, pageProps}: AppProps) {
+  const theme = createTheme();
+
   return (
     <>
       <Head>
