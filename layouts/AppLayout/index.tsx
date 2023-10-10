@@ -81,7 +81,7 @@ export const AppLayout = ({useSideBar = true, children}: Props) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 4,
           minHeight: '100vh',
           backgroundColor: '#0e1115',
           color: '#fff',
