@@ -10,15 +10,21 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {Dashboard} from '@mui/icons-material';
+import {Button} from '@mui/material';
 
 const drawerWidth = 240;
 
 interface Props {
   useSideBar?: boolean;
   children: React.ReactNode;
+  showSignUpButton?: boolean; //계정생성 버튼
 }
 
-export const AppLayout = ({useSideBar = true, children}: Props) => {
+export const AppLayout = ({
+  useSideBar = true,
+  children,
+  showSignUpButton = false,
+}: Props) => {
   return (
     <Box sx={{display: 'flex'}}>
       <CssBaseline />
@@ -41,6 +47,7 @@ export const AppLayout = ({useSideBar = true, children}: Props) => {
           <div className="title">
             ILL<span>H</span>AB
           </div>
+          {showSignUpButton && <Button variant="contained">계정 생성</Button>}
         </Toolbar>
       </AppBar>
       {useSideBar && (
