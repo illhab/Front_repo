@@ -1,6 +1,12 @@
 import {AppLayout} from '@/layouts';
-import {LogIn} from '@/containers';
+import Button from '@mui/material/Button';
 
 export default function Home() {
-  return <LogIn />;
+  return (
+    <AppLayout>
+      <Button variant="contained" disableElevation>
+        testButton
+      </Button>
+    </AppLayout>
+  );
 }
