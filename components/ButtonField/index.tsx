@@ -4,7 +4,6 @@ import {Button, ButtonProps} from '@mui/material';
 
 interface StyledButtonProps extends ButtonProps {
   colorcode?: string;
-  outlined?: boolean;
 }
 
 const StyledButton = styled(Button)<StyledButtonProps>`
@@ -23,12 +22,6 @@ const StyledButton = styled(Button)<StyledButtonProps>`
     &:hover {
       background-color: darken(${props.colorcode}, 10%) !important;
     }
-  `}
-
-  ${props =>
-    props.outlined &&
-    `
-    border: 1px solid #00FF7F; 
   `}
 `;
 
