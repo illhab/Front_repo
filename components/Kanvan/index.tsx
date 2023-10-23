@@ -1,4 +1,5 @@
 import {Draggable, Droppable} from '@hello-pangea/dnd';
+import {ItemType} from '@/types';
 import {
   TaskColumnStyles,
   TaskInformation,
@@ -11,17 +12,19 @@ interface Props {
   columns: {
     [key: string]: {
       title: string;
-      items: {
-        id: string;
-        title: string;
-        created: Date;
-      }[];
+      items: ItemType[];
     };
   }; // api 나오면 타입 수정
+  isModalOpen: boolean;
+  selectedItem: ItemType | null;
+  setIsModalOpen: (value: boolean) => void;
+  setSelectedItem: (item: ItemType | null) => void;
 }
 
 export const Kanvan = (props: Props) => {
-  const {columns} = props;
+  const {columns, isModalOpen, selectedItem, setIsModalOpen, setSelectedItem} =
+    props;
+
   return (
     <Wrapper>
       <TaskColumnStyles>
@@ -32,7 +35,13 @@ export const Kanvan = (props: Props) => {
                 <TaskList ref={provided.innerRef} {...provided.droppableProps}>
                   <Title>{column.title}</Title>
                   {column.items.map((item, index) => (
-                    <TaskCard item={item} index={index} key={item.id} />
+                    <TaskCard
+                      item={item}
+                      index={index}
+                      key={item.id}
+                      setIsModalOpen={setIsModalOpen}
+                      setSelectedItem={setSelectedItem}
+                    />
                   ))}
                   {provided.placeholder}
                 </TaskList>
@@ -48,14 +57,18 @@ export const Kanvan = (props: Props) => {
 const TaskCard = ({
   item,
   index,
+  setIsModalOpen,
+  setSelectedItem,
 }: {
-  item: {
-    id: string;
-    title: string;
-    created: Date;
-  };
+  item: ItemType;
   index: number;
+  setIsModalOpen: (value: boolean) => void;
+  setSelectedItem: (item: any) => void;
 }) => {
+  const handleCardClick = () => {
+    setIsModalOpen(true);
+    setSelectedItem(item);
+  };
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {provided => (
@@ -64,7 +77,7 @@ const TaskCard = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <TaskInformation>
+          <TaskInformation onClick={handleCardClick}>
             <div className="card-title">{item.title}</div>
             <div className="secondary-details">
               <div className="ticket-info">
