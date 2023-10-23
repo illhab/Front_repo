@@ -8,21 +8,22 @@ import {Kanvan, PageTitle} from '@/components';
 
 import {dummyTicketData, dummyUsers} from '@/contants';
 
+import {ItemType} from '@/types';
+
+import {TaskDetailModal} from '../TaskDetailModal';
 import {Wrapper} from './style';
 
 interface Column {
   title: string;
-  items: {
-    id: string;
-    title: string;
-    created: Date;
-  }[];
+  items: ItemType[];
 }
 
 export const DashBoard = () => {
   const [columns, setColumns] = useState<{[key: string]: Column}>(
     dummyTicketData,
   );
+  const [isModalOpen, setIsModalOpen] = useState(false); //상세내용 모달창 상태
+  const [selectedItem, setSelectedItem] = useState<ItemType | null>(null); //task card 선택 상태
 
   const onDragEnd = (
     result: DropResult,
@@ -101,9 +102,25 @@ export const DashBoard = () => {
         <DragDropContext
           onDragEnd={result => onDragEnd(result, columns, setColumns)}
         >
-          <Kanvan columns={columns} />
+          <Kanvan
+            columns={columns}
+            isModalOpen={isModalOpen}
+            selectedItem={selectedItem}
+            setIsModalOpen={setIsModalOpen}
+            setSelectedItem={setSelectedItem}
+          />
         </DragDropContext>
       </div>
+      {selectedItem && (
+        <TaskDetailModal
+          isModalOpen={isModalOpen}
+          selectedItem={selectedItem}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedItem(null);
+          }}
+        />
+      )}
     </Wrapper>
   );
 };

@@ -1,13 +1,6 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
-  .search-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 1.8rem;
-    margin-bottom: 3.6rem;
-  }
-
   .user-wrapper {
     display: flex;
     align-items: center;
@@ -29,13 +22,5 @@ export const Wrapper = styled.div`
         outline: 2px solid #00ff7f;
       }
     }
-
-    .add-btn {
-      background: #00ff7f;
-      font-size: 3rem;
-      line-height: 1.4;
-    }
   }
-
-  position: relative;
 `;

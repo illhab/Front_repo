@@ -7,13 +7,13 @@ interface Props {
   disableUnderline?: boolean;
 }
 
-const StyledInput = styled(Input)`
+const StyledInput = styled(Input)<Props>`
   width: 18vw;
   height: 6vh;
   align-items: center;
   border-radius: 5px;
   background-color: white;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)';
   margin-bottom: 2rem;
   padding: 1.5rem;
 
