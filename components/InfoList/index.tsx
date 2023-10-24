@@ -1,5 +1,12 @@
 import {FC, useState} from 'react';
-import {List, ListItemButton, ListItemText, Collapse, Box} from '@mui/material';
+import {
+  List,
+  ListItemButton,
+  ListItemText,
+  Collapse,
+  Box,
+  Typography,
+} from '@mui/material';
 import {ExpandLess, ExpandMore} from '@mui/icons-material';
 
 import {InfoListDetail} from '@/enums';
@@ -100,7 +107,7 @@ export const InfoList: FC<Props> = ({assigneeName, reporterName}) => {
                     },
                   }}
                 >
-                  {detailContents[info]}
+                  <Typography>{detailContents[info]}</Typography>
                 </Box>
               </Box>
             ))}

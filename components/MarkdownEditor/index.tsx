@@ -1,8 +1,7 @@
-import {FC, useState, useEffect, useRef} from 'react';
-import {Box, Button} from '@mui/material';
+import {FC, useEffect, useRef} from 'react';
 
 import SimpleMDE from 'simplemde';
-import 'simplemde/dist/simplemde.min.css';
+import {Wrapper} from './style';
 
 interface Props {
   mode?: 'desc' | 'comment' | 'inlineComment';
@@ -56,5 +55,9 @@ export const MarkdownEditor: FC<Props> = ({
     };
   }, []);
 
-  return <textarea ref={textAreaRef} />;
+  return (
+    <Wrapper>
+      <textarea ref={textAreaRef} className="CodeMirror" />
+    </Wrapper>
+  );
 };
