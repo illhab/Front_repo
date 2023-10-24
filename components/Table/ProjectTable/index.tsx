@@ -7,8 +7,8 @@ import {
   TableFooter,
   TableHead,
   TableRow,
+  TablePagination,
 } from '@mui/material';
-import {TablePagination} from '@mui/base';
 
 import {TableWrapper} from './style';
 
