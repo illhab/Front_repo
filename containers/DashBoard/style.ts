@@ -1,6 +1,10 @@
 import styled from '@emotion/styled';
 
 export const Wrapper = styled.div`
+  .page-title {
+    margin-bottom: 4rem;
+  }
+
   .search-wrapper {
     display: flex;
     align-items: center;

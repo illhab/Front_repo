@@ -1,3 +1,5 @@
+import React from 'react';
+
 import styled from '@emotion/styled';
 
 interface Props {
@@ -8,10 +10,9 @@ const Title = styled.div`
   color: #fff;
   font-size: 2.4rem;
   font-weight: 800;
-  margin-bottom: 4rem;
 `;
 
 export const PageTitle = (props: Props) => {
   const {title} = props;
-  return <Title>{title}</Title>;
+  return <Title className="page-title">{title}</Title>;
 };
