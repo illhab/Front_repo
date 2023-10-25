@@ -1,22 +1,20 @@
 import {FC, useState} from 'react';
-import ReactMarkdown from 'react-markdown';
+import {Box, Typography, Modal, Fade} from '@mui/material';
 
 import {
-  Box,
-  Typography,
-  OutlinedInput,
-  Button,
-  Modal,
-  Fade,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-
-import {PopOver, InfoList, DynamicMarkdownEditor} from '@/components';
+  PopOver,
+  InfoList,
+  DynamicMarkdownEditor,
+  ModalHead,
+  ModalDescSection,
+  ModalCommentInputSection,
+  ModalCommentListSection,
+  ModalBtnSet,
+} from '@/components';
 import {ItemType} from '@/types';
 import {dummyUsers} from '@/contants';
-import {timeAgo} from '@/utils';
 
-import {ModalBackground, ModalContent, Wrapper} from './style';
+import {ModalBackground, ModalContent} from './style';
 
 interface Props {
   isModalOpen: boolean;
@@ -38,279 +36,120 @@ export const TaskDetailModal: FC<Props> = ({
 
   const [isEditingInlineComment, setEditingInlineComment] =
     useState<boolean>(false);
-
-  const [commentTime, setCommentTime] = useState<string | null>(null);
+  const [commentTime, setCommentTime] = useState<string>('');
 
   //임시로 더미 유저 사용, 추후 변경 필요
   const assignee = dummyUsers.find(user => user.id === 2)?.name;
   const reporter = dummyUsers.find(user => user.id === 1)?.name;
 
+  //함수1 : 본문 추가
+  const handleDescSave = () => {
+    //작성한 본문 post api 추가
+    setEditingDescription(false);
+  };
+  //함수2 : 본문 추가 취소
+  const handleDescCancle = () => {
+    setEditingDescription(false);
+  };
+  //함수3 : 본문 마크다운 에디터 열기
+  const handleDescEditOpen = () => {
+    setEditingDescription(true);
+  };
+
+  //함수4 : 답글 추가
+  const handleCommentSave = () => {
+    //답글 post api 추가
+    setEditingComment(false);
+    setCommentTime(new Date().toISOString());
+  };
+  //함수5 : 답글 추가 취소
+  const handleCommentCancle = () => {
+    setEditingComment(false);
+  };
+  //함수6 : 답글 입력창 마크다운 에디터 열기
+  const handleCommentEditOpen = () => {
+    setEditingComment(true);
+  };
+
+  //함수7 : 답글 수정
+  const handleInlineCommentSave = () => {
+    //답글 update api 추가
+    setEditingInlineComment(false);
+  };
+  //함수8 : 답글 수정 취소
+  const handleInlineCommentCancle = () => {
+    setEditingInlineComment(false);
+  };
+  //함수9 : 작성된 답글에서 마크다운 에디터 열기
+  const handleInlineCommentEditOpen = () => {
+    setEditingInlineComment(true);
+  };
+  //함수10 : 답글 삭제
+  const handelInlineCommentDelete = () => {
+    //답글 delete api 추가
+    setEditingComment(false);
+    setComment('');
+  };
+
   return (
-    <Modal open={isModalOpen} onClose={onClose} aria-labelledby="modal-title">
+    <Modal open={isModalOpen} aria-labelledby="modal-title">
       <Fade in={isModalOpen}>
-        <Wrapper>
-          <Box sx={ModalBackground}>
-            <Box sx={ModalContent}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: '5px',
-                  alignItems: 'center',
-                  marginBottom: '20px',
-                }}
-              >
-                <Typography variant="h5" id="modal-modal-title">
-                  상태아이콘 FRON-1
-                </Typography>
-                <CloseIcon
-                  onClick={onClose}
-                  fontSize="large"
-                  sx={{cursor: 'pointer'}}
-                ></CloseIcon>
+        <Box sx={ModalBackground}>
+          <Box sx={ModalContent}>
+            {/* 헤드 섹션 */}
+            <ModalHead onClose={onClose} />
+            {/* 바디 섹션 */}
+            <Box sx={{display: 'flex'}}>
+              {/* 바디 좌측 */}
+              <Box sx={{flex: '2 2 0%', paddingRight: '20px'}}>
+                {/* 본문 섹션 */}
+                <ModalDescSection
+                  selectedItem={selectedItem}
+                  isEditingDescription={isEditingDescription}
+                  desc={desc}
+                  setDesc={setDesc}
+                  handleDescSave={handleDescSave}
+                  handleDescCancle={handleDescCancle}
+                  handleDescEditOpen={handleDescEditOpen}
+                />
+
+                {/* 답글 입력 섹션 */}
+                <ModalCommentInputSection
+                  assignee={assignee}
+                  isEditingComment={isEditingComment}
+                  comment={comment}
+                  setComment={setComment}
+                  handleCommentSave={handleCommentSave}
+                  handleCommentCancle={handleCommentCancle}
+                  handleCommentEditOpen={handleCommentEditOpen}
+                />
+
+                {/* 답글 보이는 섹션 */}
+                {comment && (
+                  <ModalCommentListSection
+                    assignee={assignee}
+                    commentTime={commentTime}
+                    isEditingInlineComment={isEditingInlineComment}
+                    comment={comment}
+                    setComment={setComment}
+                    handleInlineCommentSave={handleInlineCommentSave}
+                    handleInlineCommentCancle={handleInlineCommentCancle}
+                    handleInlineCommentEditOpen={handleInlineCommentEditOpen}
+                    handelInlineCommentDelete={handelInlineCommentDelete}
+                  />
+                )}
               </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                }}
-              >
-                <Box sx={{flex: '2 2 0%', paddingRight: '20px'}}>
-                  <Typography variant="h3" sx={{paddingBottom: '20px'}}>
-                    {selectedItem?.title}
-                  </Typography>
-                  <Box sx={{paddingBottom: '10rem'}}>
-                    <Typography
-                      variant="h5"
-                      sx={{fontWeight: 'bold', marginBottom: '1rem'}}
-                    >
-                      설명
-                    </Typography>
-                    {isEditingDescription ? (
-                      <Box>
-                        <DynamicMarkdownEditor
-                          mode="desc"
-                          desc={desc}
-                          setDesc={setDesc}
-                        />
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setEditingDescription(false);
-                          }}
-                          sx={{
-                            marginRight: '1rem',
-                            fontWeight: 'bold',
-                            fontSize: '1.5rem',
-                          }}
-                        >
-                          저장
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setEditingDescription(false);
-                          }}
-                          sx={{
-                            marginRight: '1rem',
-                            fontWeight: 'bold',
-                            fontSize: '1.5rem',
-                          }}
-                        >
-                          취소
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Box
-                        sx={{fontSize: '1.5rem'}}
-                        onClick={() => setEditingDescription(true)}
-                      >
-                        {desc ? (
-                          <ReactMarkdown>{desc}</ReactMarkdown>
-                        ) : (
-                          '설명 편집'
-                        )}
-                      </Box>
-                    )}
-                  </Box>
-                  <Box sx={{display: 'flex', alignItems: 'center'}}>
-                    <Box sx={{marginRight: '1.5rem'}}>
-                      <div className="user-wrapper">
-                        <div className="user-icon">
-                          {dummyUsers.find(user => user.id === 2)?.name}
-                        </div>
-                      </div>
-                    </Box>
-
-                    {isEditingComment ? (
-                      <Box>
-                        <DynamicMarkdownEditor
-                          mode="comment"
-                          comment={comment}
-                          setComment={setComment}
-                        />
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setEditingComment(false);
-                            setCommentTime(new Date().toISOString());
-                          }}
-                          sx={{
-                            marginRight: '1rem',
-                            fontWeight: 'bold',
-                            fontSize: '1.5rem',
-                          }}
-                        >
-                          저장
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setEditingComment(false);
-                          }}
-                          sx={{
-                            marginRight: '1rem',
-                            fontWeight: 'bold',
-                            fontSize: '1.5rem',
-                          }}
-                        >
-                          취소
-                        </Button>
-                      </Box>
-                    ) : (
-                      <OutlinedInput
-                        placeholder="댓글 추가 ..."
-                        onClick={() => setEditingComment(true)}
-                        sx={{
-                          width: '100%',
-                          '& .MuiInputBase-input': {
-                            fontSize: '1rem',
-                          },
-                          '& .MuiInputBase-input::placeholder': {
-                            fontSize: '1.5rem',
-                          },
-                        }}
-                      />
-                    )}
-                  </Box>
-                  {comment && (
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        marginTop: '3rem',
-                      }}
-                    >
-                      <Box sx={{marginRight: '1.5rem'}}>
-                        <div className="user-wrapper">
-                          <div className="user-icon">
-                            {dummyUsers.find(user => user.id === 2)?.name}
-                          </div>
-                        </div>
-                      </Box>
-                      <Box>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Box sx={{marginRight: '1rem'}}>
-                            <Typography variant="h5">
-                              {dummyUsers.find(user => user.id === 2)?.name}
-                            </Typography>
-                          </Box>
-                          <Typography variant="h5">
-                            {commentTime ? timeAgo(new Date(commentTime)) : ''}
-                          </Typography>
-                        </Box>
-
-                        {isEditingInlineComment ? (
-                          <Box>
-                            <DynamicMarkdownEditor
-                              mode="inlineComment"
-                              comment={comment}
-                              setComment={setComment}
-                            />
-                            <Button
-                              variant="contained"
-                              onClick={() => setEditingInlineComment(false)}
-                              sx={{
-                                marginRight: '1rem',
-                                fontWeight: 'bold',
-                                fontSize: '1.5rem',
-                              }}
-                            >
-                              저장
-                            </Button>
-                            <Button
-                              variant="contained"
-                              onClick={() => setEditingInlineComment(false)}
-                              sx={{
-                                marginRight: '1rem',
-                                fontWeight: 'bold',
-                                fontSize: '1.5rem',
-                              }}
-                            >
-                              취소
-                            </Button>
-                          </Box>
-                        ) : (
-                          <>
-                            <Typography
-                              sx={{
-                                width: '100%',
-                                fontWeight: 'bold',
-                                fontSize: '1.5rem',
-                                marginBottom: '1rem',
-                              }}
-                            >
-                              {comment}
-                            </Typography>
-                            <Box sx={{display: 'flex', alignItems: 'center'}}>
-                              <Typography
-                                sx={{
-                                  fontSize: '1.5rem',
-                                  color: 'grey',
-                                  marginRight: '1rem',
-                                  cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                  setEditingInlineComment(true);
-                                }}
-                              >
-                                편집
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontSize: '1.5rem',
-                                  color: 'grey',
-                                  cursor: 'pointer',
-                                }}
-                                onClick={() => {
-                                  setEditingComment(false);
-                                  setComment('');
-                                }}
-                              >
-                                삭제
-                              </Typography>
-                            </Box>
-                          </>
-                        )}
-                      </Box>
-                    </Box>
-                  )}
-                </Box>
-                <Box sx={{flex: '1 1 0%'}}>
-                  <PopOver />
-                  <InfoList assigneeName={assignee} reporterName={reporter} />
-                  <Typography variant="h5">
-                    생성일 : {selectedItem?.created.toLocaleDateString()}
-                  </Typography>
-                </Box>
+              {/* 바디 우측 */}
+              <Box sx={{flex: '1 1 0%'}}>
+                <PopOver />
+                <InfoList assignee={assignee} reporter={reporter} />
+                <Typography variant="h5">
+                  생성일 : {selectedItem?.created.toLocaleDateString()}
+                </Typography>
               </Box>
             </Box>
           </Box>
-        </Wrapper>
+        </Box>
       </Fade>
     </Modal>
   );
