@@ -4,6 +4,7 @@ export * from './CenteredForm';
 export * from './InputField';
 export * from './ButtonField';
 export * from './HeadField';
+export * from './Table';
 export * from './PopOver';
 export * from './InfoList';
 export * from './DynamicMarkdownEditor';
