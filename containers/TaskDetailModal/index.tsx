@@ -12,7 +12,7 @@ import {
 import {ItemType} from '@/types';
 import {dummyUsers} from '@/contants';
 
-import {ModalBackground, ModalContent} from './style';
+import {ModalContainer, ModalContent} from './style';
 
 interface Props {
   isModalOpen: boolean;
@@ -90,61 +90,64 @@ export const TaskDetailModal: FC<Props> = ({
   };
 
   return (
-    <Modal open={isModalOpen} aria-labelledby="modal-title">
+    <Modal
+      open={isModalOpen}
+      onClose={onClose}
+      aria-labelledby="modal-title"
+      sx={ModalContainer}
+    >
       <Fade in={isModalOpen}>
-        <Box sx={ModalBackground}>
-          <Box sx={ModalContent}>
-            {/* 헤드 섹션 */}
-            <ModalHead onClose={onClose} />
-            {/* 바디 섹션 */}
-            <Box sx={{display: 'flex'}}>
-              {/* 바디 좌측 */}
-              <Box sx={{flex: '2 2 0%', paddingRight: '20px'}}>
-                {/* 본문 섹션 */}
-                <ModalDescSection
-                  selectedItem={selectedItem}
-                  isEditingDescription={isEditingDescription}
-                  desc={desc}
-                  setDesc={setDesc}
-                  handleDescSave={handleDescSave}
-                  handleDescCancle={handleDescCancle}
-                  handleDescEditOpen={handleDescEditOpen}
-                />
+        <Box sx={ModalContent}>
+          {/* 헤드 섹션 */}
+          <ModalHead onClose={onClose} />
+          {/* 바디 섹션 */}
+          <Box sx={{display: 'flex'}}>
+            {/* 바디 좌측 */}
+            <Box sx={{flex: '2 2 0%', paddingRight: '20px'}}>
+              {/* 본문 섹션 */}
+              <ModalDescSection
+                selectedItem={selectedItem}
+                isEditingDescription={isEditingDescription}
+                desc={desc}
+                setDesc={setDesc}
+                handleDescSave={handleDescSave}
+                handleDescCancle={handleDescCancle}
+                handleDescEditOpen={handleDescEditOpen}
+              />
 
-                {/* 답글 입력 섹션 */}
-                <ModalCommentInputSection
+              {/* 답글 입력 섹션 */}
+              <ModalCommentInputSection
+                assignee={assignee}
+                isEditingComment={isEditingComment}
+                comment={comment}
+                setComment={setComment}
+                handleCommentSave={handleCommentSave}
+                handleCommentCancle={handleCommentCancle}
+                handleCommentEditOpen={handleCommentEditOpen}
+              />
+
+              {/* 답글 보이는 섹션 */}
+              {comment && (
+                <ModalCommentListSection
                   assignee={assignee}
-                  isEditingComment={isEditingComment}
+                  commentTime={commentTime}
+                  isEditingInlineComment={isEditingInlineComment}
                   comment={comment}
                   setComment={setComment}
-                  handleCommentSave={handleCommentSave}
-                  handleCommentCancle={handleCommentCancle}
-                  handleCommentEditOpen={handleCommentEditOpen}
+                  handleInlineCommentSave={handleInlineCommentSave}
+                  handleInlineCommentCancle={handleInlineCommentCancle}
+                  handleInlineCommentEditOpen={handleInlineCommentEditOpen}
+                  handelInlineCommentDelete={handelInlineCommentDelete}
                 />
-
-                {/* 답글 보이는 섹션 */}
-                {comment && (
-                  <ModalCommentListSection
-                    assignee={assignee}
-                    commentTime={commentTime}
-                    isEditingInlineComment={isEditingInlineComment}
-                    comment={comment}
-                    setComment={setComment}
-                    handleInlineCommentSave={handleInlineCommentSave}
-                    handleInlineCommentCancle={handleInlineCommentCancle}
-                    handleInlineCommentEditOpen={handleInlineCommentEditOpen}
-                    handelInlineCommentDelete={handelInlineCommentDelete}
-                  />
-                )}
-              </Box>
-              {/* 바디 우측 */}
-              <Box sx={{flex: '1 1 0%'}}>
-                <PopOver />
-                <InfoList assignee={assignee} reporter={reporter} />
-                <Typography variant="h5">
-                  생성일 : {selectedItem?.created.toLocaleDateString()}
-                </Typography>
-              </Box>
+              )}
+            </Box>
+            {/* 바디 우측 */}
+            <Box sx={{flex: '1 1 0%'}}>
+              <PopOver />
+              <InfoList assignee={assignee} reporter={reporter} />
+              <Typography variant="h5">
+                생성일 : {selectedItem?.created.toLocaleDateString()}
+              </Typography>
             </Box>
           </Box>
         </Box>
