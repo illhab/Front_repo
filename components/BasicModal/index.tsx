@@ -19,11 +19,10 @@ interface Props {
   open: boolean;
   onClose: (value?: any) => void;
   children: React.ReactNode;
-  title?: string;
 }
 
 export const BasicModal = (props: Props) => {
-  const {open, onClose, children, title} = props;
+  const {open, onClose, children} = props;
 
   return (
     <Modal
