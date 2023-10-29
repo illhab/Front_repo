@@ -10,19 +10,31 @@ import {dummyTicketData, dummyUsers} from '@/contants';
 
 import {Wrapper} from './style';
 
+import {ResponseTicket} from '@/modules';
+
+import {TicketDetailModal} from '..';
+
 interface Column {
   title: string;
-  items: {
-    id: string;
-    title: string;
-    created: Date;
-  }[];
+  items: ResponseTicket[];
 }
 
 export const DashBoard = () => {
   const [columns, setColumns] = useState<{[key: string]: Column}>(
     dummyTicketData,
   );
+  const [showTicketDetailModal, setShowTicketDetailModal] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<ResponseTicket>();
+
+  const onCloseTicketDetailModal = () => {
+    setShowTicketDetailModal(false);
+    setSelectedTicket(undefined);
+  };
+
+  const onShowTicketDetailModal = (ticket: ResponseTicket) => {
+    setSelectedTicket(ticket);
+    setShowTicketDetailModal(true);
+  };
 
   const onDragEnd = (
     result: DropResult,
@@ -30,7 +42,7 @@ export const DashBoard = () => {
     setColumns: (value: {[key: string]: Column}) => void,
   ) => {
     if (!result.destination) return;
-    console.log(result);
+    console.log('onDragEnd###', result);
     const {source, destination} = result;
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
@@ -101,9 +113,17 @@ export const DashBoard = () => {
         <DragDropContext
           onDragEnd={result => onDragEnd(result, columns, setColumns)}
         >
-          <Kanvan columns={columns} />
+          <Kanvan
+            columns={columns}
+            onShowTicketDetailModal={onShowTicketDetailModal}
+          />
         </DragDropContext>
       </div>
+      <TicketDetailModal
+        open={showTicketDetailModal}
+        onClose={onCloseTicketDetailModal}
+        selectedTicket={selectedTicket}
+      />
     </Wrapper>
   );
 };
