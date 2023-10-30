@@ -3,11 +3,15 @@ import styled from '@emotion/styled';
 import {Theme} from '@mui/material';
 
 export const StyledContentWrapper = styled.div`
-  .title {
+  .title-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 4rem;
     input {
+      :hover {
+        background: #363743;
+      }
       font-size: 2.8rem;
       background: #20212d;
       color: #fff;
@@ -19,6 +23,21 @@ export const StyledContentWrapper = styled.div`
       display: flex;
       align-items: center;
       gap: 0.5rem;
+    }
+  }
+
+  .content-section {
+    .btn-wrapper {
+      margin: 1rem 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .content {
+      :hover {
+        background: #363743;
+      }
     }
   }
 `;
