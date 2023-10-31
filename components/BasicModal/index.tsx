@@ -8,6 +8,8 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '128rem',
+  height: '70vh',
+  overflowY: 'scroll',
   bgcolor: (theme: Theme) => theme.palette.secondary.main,
   border: '2px solid #000',
   color: '#fff',
