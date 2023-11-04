@@ -22,6 +22,37 @@ interface Props {
   selectedTicket?: ResponseTicket;
 }
 
+const dummyCommentList = [
+  {
+    id: '1',
+    userId: '1',
+    name: 'HJ',
+    comment: '빨리 처리해주세용.',
+    created: new Date(),
+  },
+  {
+    id: '2',
+    userId: '2',
+    name: 'TH',
+    comment: '빨리빨리',
+    created: new Date(),
+  },
+  {
+    id: '3',
+    userId: '3',
+    name: 'EJ',
+    comment: '빨리용',
+    created: new Date(),
+  },
+  {
+    id: '4',
+    userId: '4',
+    name: 'JJ',
+    comment: '넹ㅎㅎ',
+    created: new Date(),
+  },
+];
+
 export const TicketDetailModal = (props: Props) => {
   const {open, onClose, selectedTicket} = props;
 
@@ -36,38 +67,14 @@ export const TicketDetailModal = (props: Props) => {
   // 작성 댓글 state 및 댓글 수정 모드 여부
   const [editComment, setEditComment] = useState(false);
   const [comment, setComment] = useState('');
+  const [modifyComment, setModifyComment] = useState('');
+  const [modifyCommentIndex, setModifyCommentIndex] = useState<
+    number | undefined
+  >();
 
   // dummy comment list
-  const [dummyCommentList, setDummyCommentList] = useState([
-    {
-      id: '1',
-      userId: '1',
-      name: 'HJ',
-      comment: '빨리 처리해주세용.',
-      created: new Date(),
-    },
-    {
-      id: '2',
-      userId: '2',
-      name: 'TH',
-      comment: '빨리빨리',
-      created: new Date(),
-    },
-    {
-      id: '3',
-      userId: '3',
-      name: 'EJ',
-      comment: '빨리용',
-      created: new Date(),
-    },
-    {
-      id: '4',
-      userId: '4',
-      name: 'JJ',
-      comment: '넹ㅎㅎ',
-      created: new Date(),
-    },
-  ]);
+  const [dummyTempCommentList, setDummyTempCommentList] =
+    useState(dummyCommentList);
 
   useEffect(() => {
     if (!open) {
@@ -75,7 +82,9 @@ export const TicketDetailModal = (props: Props) => {
       setEditTitle(false);
       setEditComment(false);
       setComment('');
+      setModifyComment('');
       setTempSelectedTicket(undefined);
+      setModifyCommentIndex(undefined);
     }
   }, [open]);
 
@@ -141,7 +150,7 @@ export const TicketDetailModal = (props: Props) => {
       showLoading();
       setEditComment(false);
       // TODO:: comment 등록 API
-      setDummyCommentList(prev => {
+      setDummyTempCommentList(prev => {
         return prev.concat({
           id: String(prev.length + 1),
           userId: '4',
@@ -154,6 +163,40 @@ export const TicketDetailModal = (props: Props) => {
       console.log(error);
     } finally {
       setComment('');
+      hideLoading();
+    }
+  };
+
+  const onModifyComment = async () => {
+    try {
+      showLoading();
+      // TODO:: comment 수정 API
+      setDummyTempCommentList(prev => {
+        if (!!modifyCommentIndex) {
+          const data = JSON.parse(JSON.stringify(prev));
+          data[modifyCommentIndex].comment = modifyComment;
+          return data;
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setModifyCommentIndex(undefined);
+      hideLoading();
+    }
+  };
+
+  const onDeleteComment = async (id: string) => {
+    try {
+      showLoading();
+      // TODO:: comment 삭제 API
+      setDummyTempCommentList(prev => {
+        return prev.filter(x => x.id !== id);
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setModifyCommentIndex(undefined);
       hideLoading();
     }
   };
@@ -280,7 +323,7 @@ export const TicketDetailModal = (props: Props) => {
                 </div>
               </div>
               <div className="comment-list-section">
-                {dummyCommentList.map(item => (
+                {dummyTempCommentList.map((item, index) => (
                   <div className="user-comment-item" key={item.id}>
                     <div className="user-icon">{item.name}</div>
                     <div>
@@ -290,10 +333,55 @@ export const TicketDetailModal = (props: Props) => {
                           {dayjs(item.created).format('YYYY.MM.DD HH:mm')}
                         </div>
                       </div>
-                      <div
-                        className="user-comment"
-                        dangerouslySetInnerHTML={{__html: item.comment}}
-                      />
+                      {modifyCommentIndex === index ? (
+                        <>
+                          <CustomEditor
+                            htmlStr={modifyComment}
+                            setHtmlStr={text => setModifyComment(text)}
+                          />
+                          <div className="btn-wrapper">
+                            <Button
+                              variant="contained"
+                              size="large"
+                              sx={CancelButtonStyle}
+                              onClick={() => {
+                                setModifyComment('');
+                                setModifyCommentIndex(undefined);
+                              }}
+                            >
+                              취소
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="large"
+                              sx={ButtonStyle}
+                              onClick={onModifyComment}
+                            >
+                              수정
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            className="user-comment"
+                            dangerouslySetInnerHTML={{__html: item.comment}}
+                          />
+                          <div className="modify-btn-wrapper">
+                            <div
+                              onClick={() => {
+                                setModifyComment(item.comment);
+                                setModifyCommentIndex(index);
+                              }}
+                            >
+                              편집
+                            </div>
+                            <div onClick={() => onDeleteComment(item.id)}>
+                              삭제
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))}

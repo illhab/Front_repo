@@ -101,6 +101,21 @@ export const StyledContentWrapper = styled.div`
           font-size: 1.2rem;
           margin-bottom: 1rem;
         }
+        .btn-wrapper {
+          margin: 1rem 0;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .modify-btn-wrapper {
+          margin-top: 1rem;
+          display: flex;
+          gap: 0.5rem;
+          opacity: 0.8;
+          div {
+            cursor: pointer;
+          }
+        }
       }
     }
   }
