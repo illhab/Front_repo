@@ -5,3 +5,4 @@ export * from './InputField';
 export * from './ButtonField';
 export * from './HeadField';
 export * from './Table';
+export * from './BasicModal';

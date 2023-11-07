@@ -1,3 +1,6 @@
+import {TicketStatus} from '@/enums';
+import {ResponseTicket} from '@/modules';
+
 export const dummyUsers = [
   {
     id: 1,
@@ -17,23 +20,43 @@ export const dummyUsers = [
   },
 ];
 
-export const dummyTicketData = {
+export const dummyTicketData: {
+  [key: string]: {
+    title: string;
+    items: ResponseTicket[];
+  };
+} = {
   ['1']: {
     title: '할 일',
     items: [
       {
         id: '1123',
-        title: '할일 1',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 1',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.TODO,
         created: new Date(),
       },
       {
         id: '25245',
-        title: '할일 2',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 2',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.TODO,
         created: new Date(),
       },
       {
         id: '36423',
-        title: '할일 3',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 3',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.TODO,
         created: new Date(),
       },
     ],
@@ -43,57 +66,67 @@ export const dummyTicketData = {
     items: [
       {
         id: '41235',
-        title: '진행 중 1',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 4',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.IN_PROGRESS,
         created: new Date(),
       },
       {
         id: '52345',
-        title: '진행 중 2',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 5',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.IN_PROGRESS,
         created: new Date(),
       },
       {
         id: '631267',
-        title: '진행 중 3',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 6',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.IN_PROGRESS,
         created: new Date(),
       },
     ],
   },
   ['3']: {
-    title: '리뷰 중',
-    items: [
-      {
-        id: '0893747',
-        title: '리뷰 중 1',
-        created: new Date(),
-      },
-      {
-        id: '4875478',
-        title: '리뷰 중 2',
-        created: new Date(),
-      },
-      {
-        id: '123459',
-        title: '리뷰 중 3',
-        created: new Date(),
-      },
-    ],
-  },
-  ['4']: {
     title: '완료',
     items: [
       {
         id: '112350',
-        title: '완료 1',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 7',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.COMPLETE,
         created: new Date(),
       },
       {
         id: '1177223',
-        title: '완료 2',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 8',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.COMPLETE,
         created: new Date(),
       },
       {
         id: '12356712',
-        title: '완료 3',
+        ticketId: 1,
+        author_userId: '13',
+        reporter_userId: '13',
+        title: '티켓 9',
+        content: '안녕하세요 일하세요.',
+        status: TicketStatus.COMPLETE,
         created: new Date(),
       },
     ],
