@@ -8,5 +8,9 @@ export function createPalette() {
       main: '#20212D',
       contrastText: '#fff',
     },
+    warning: {
+      main: '#D32F2F',
+      contrastText: '#0e1115',
+    },
   };
 }

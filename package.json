@@ -17,12 +17,24 @@
     "@types/node": "20.5.0",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "axios": "^1.6.0",
     "dayjs": "^1.11.10",
+    "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "emotion-reset": "^3.0.1",
+    "html-to-draftjs": "^1.5.0",
     "next": "13.4.16",
     "next-fonts": "^1.5.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.1.6"
+    "react-draft-wysiwyg": "^1.15.0",
+    "typescript": "5.1.6",
+    "zustand": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/draft-js": "^0.11.14",
+    "@types/draftjs-to-html": "^0.8.3",
+    "@types/html-to-draftjs": "^1.4.2",
+    "@types/react-draft-wysiwyg": "^1.13.6"
   }
 }

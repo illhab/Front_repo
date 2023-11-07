@@ -1,4 +1,7 @@
 import {Draggable, Droppable} from '@hello-pangea/dnd';
+
+import {ResponseTicket} from '@/modules';
+
 import {
   TaskColumnStyles,
   TaskInformation,
@@ -11,17 +14,14 @@ interface Props {
   columns: {
     [key: string]: {
       title: string;
-      items: {
-        id: string;
-        title: string;
-        created: Date;
-      }[];
+      items: ResponseTicket[];
     };
   }; // api 나오면 타입 수정
+  onShowTicketDetailModal: (ticket: ResponseTicket) => void;
 }
 
 export const Kanvan = (props: Props) => {
-  const {columns} = props;
+  const {columns, onShowTicketDetailModal} = props;
   return (
     <Wrapper>
       <TaskColumnStyles>
@@ -32,7 +32,12 @@ export const Kanvan = (props: Props) => {
                 <TaskList ref={provided.innerRef} {...provided.droppableProps}>
                   <Title>{column.title}</Title>
                   {column.items.map((item, index) => (
-                    <TaskCard item={item} index={index} key={item.id} />
+                    <TaskCard
+                      item={item}
+                      index={index}
+                      key={item.id}
+                      onShowTicketDetailModal={onShowTicketDetailModal}
+                    />
                   ))}
                   {provided.placeholder}
                 </TaskList>
@@ -48,13 +53,11 @@ export const Kanvan = (props: Props) => {
 const TaskCard = ({
   item,
   index,
+  onShowTicketDetailModal,
 }: {
-  item: {
-    id: string;
-    title: string;
-    created: Date;
-  };
+  item: ResponseTicket;
   index: number;
+  onShowTicketDetailModal: (ticket: ResponseTicket) => void;
 }) => {
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
@@ -64,7 +67,7 @@ const TaskCard = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <TaskInformation>
+          <TaskInformation onClick={() => onShowTicketDetailModal(item)}>
             <div className="card-title">{item.title}</div>
             <div className="secondary-details">
               <div className="ticket-info">
